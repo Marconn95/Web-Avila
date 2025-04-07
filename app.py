@@ -17,10 +17,10 @@ def registrar_consulta(cedula_consultada):
     conn = sqlite3.connect('alumnos.db')
     cursor = conn.cursor()
 
+    # Aquí la consulta solo toma los datos de la tabla "alumnos"
     cursor.execute('''
-        SELECT alumnos.cedula, alumnos.apellidos, alumnos.nombres, cursos.nombre
+        SELECT alumnos.cedula, alumnos.apellido, alumnos.nombre, alumnos.curso_id
         FROM alumnos
-        JOIN cursos ON alumnos.curso_id = cursos.id
         WHERE alumnos.cedula = ?
     ''', (cedula_consultada,))
     
