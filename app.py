@@ -19,7 +19,7 @@ def registrar_consulta(cedula_consultada):
 
     # Aquí la consulta solo toma los datos de la tabla "alumnos"
     cursor.execute('''
-        SELECT alumnos.cedula, alumnos.apellido, alumnos.nombre, alumnos.curso_id
+        SELECT alumnos.cedula, alumnos.apellidos, alumnos.nombres, alumnos.curso_id
         FROM alumnos
         WHERE alumnos.cedula = ?
     ''', (cedula_consultada,))
