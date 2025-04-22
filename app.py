@@ -17,11 +17,10 @@ def registrar_consulta(cedula_consultada):
     conn = sqlite3.connect('alumnos.db')
     cursor = conn.cursor()
 
-    # Aquí la consulta solo toma los datos de la tabla "alumnos"
     cursor.execute('''
-        SELECT alumnos.cedula, alumnos.apellidos, alumnos.nombres, alumnos.curso_id
+        SELECT cedula, apellidos, nombres, curso_id
         FROM alumnos
-        WHERE alumnos.cedula = ?
+        WHERE cedula = ?
     ''', (cedula_consultada,))
     
     resultado = cursor.fetchone()
@@ -44,10 +43,12 @@ def buscar():
         resultado = registrar_consulta(cedula)
 
         archivo_pdf = f'{cedula}.pdf'
-        ruta_pdf = os.path.join('pdfs', archivo_pdf)
+        ruta_pdf = os.path.join(os.getcwd(), 'pdfs', archivo_pdf)
+
+        print("Buscando:", ruta_pdf)  # Depuración
 
         if resultado and os.path.exists(ruta_pdf):
-            return send_from_directory('pdfs', archivo_pdf, as_attachment=True)
+            return send_from_directory(os.path.join(os.getcwd(), 'pdfs'), archivo_pdf, as_attachment=True)
         else:
             mensaje = 'Cédula no encontrada o archivo PDF no disponible.'
     
