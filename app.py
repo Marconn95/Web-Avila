@@ -34,27 +34,22 @@ def registrar_consulta(cedula_consultada):
         return resultado
     else:
         return None
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route('/', methods=['GET', 'POST'])
+PDF_FOLDER = os.path.join('static', 'pdfs')
+
+@app.route('/buscar', methods=['POST'])
 def buscar():
-    mensaje = ''
-    if request.method == 'POST':
-        cedula = request.form['cedula'].strip()
-        resultado = registrar_consulta(cedula)
+    cedula = request.form.get('cedula')
+    archivo = f"{cedula}.pdf"
+    ruta = os.path.join(PDF_FOLDER, archivo)
 
-        archivo_pdf = f'{cedula}.pdf'
-        ruta_pdf = os.path.join(os.getcwd(), 'pdfs', archivo_pdf)
-
-        print("Buscando:", ruta_pdf)  # Depuración
-        print(f"Ruta PDF esperada: {ruta_pdf}")
-        print(f"¿Existe el archivo?: {os.path.exists(ruta_pdf)}")
-
-        if resultado and os.path.exists(ruta_pdf):
-            return send_from_directory(os.path.join(os.getcwd(), 'pdfs'), archivo_pdf, as_attachment=True)
-        else:
-            mensaje = 'Cédula no encontrada o archivo PDF no disponible.'
-    
-    return render_template('index.html', mensaje=mensaje)
+    if os.path.exists(ruta):
+        return send_from_directory(PDF_FOLDER, archivo, as_attachment=True)
+    else:
+        return f"No se encontró el archivo para la cédula {cedula}", 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
