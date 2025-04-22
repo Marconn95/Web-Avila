@@ -46,6 +46,8 @@ def buscar():
         ruta_pdf = os.path.join(os.getcwd(), 'pdfs', archivo_pdf)
 
         print("Buscando:", ruta_pdf)  # Depuración
+        print(f"Ruta PDF esperada: {ruta_pdf}")
+        print(f"¿Existe el archivo?: {os.path.exists(ruta_pdf)}")
 
         if resultado and os.path.exists(ruta_pdf):
             return send_from_directory(os.path.join(os.getcwd(), 'pdfs'), archivo_pdf, as_attachment=True)
